@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30 Days of Proof</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Courier+Prime:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="counter">
+  <div id="counter-label">proofs unsealed</div>
+  <div id="counter-value">0 / 30</div>
+  <div id="counter-bar"><div id="counter-fill"></div></div>
+</div>
+
+<div id="music-player">
+  <div id="music-bars">
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div id="music-label">ambient</div>
+  <div id="music-btn-wrap">
+    <div id="music-tooltip">music is playing · click to mute</div>
+    <div id="music-btn">
+      <svg id="icon-play" viewBox="0 0 24 24" style="display:none"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </div>
+  </div>
+</div>
+
+
+<audio id="bg-music" loop preload="none">
+  <source src="ambient.mp3" type="audio/mpeg">
+</audio>
+
+<div id="lightbox">
+  <div id="lightbox-close">close · esc</div>
+  <img id="lightbox-img" src="" alt="">
+  <div id="lightbox-caption"></div>
+</div>
+
+<div id="loader">
+  <div style="position:relative; padding: 40px 60px; text-align:center;">
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+    <div class="loader-title">30 Days of Gratitude</div>
+    <div class="loader-sub">A letter to my future self</div>
+    <div class="loader-sub">Please turn up your volume</div>
+    <div class="loader-line" style="margin: 0 auto;"></div>
+    <div id="loader-enter">enter the archive</div>
+  </div>
+</div>
+
+
+<section id="intro">
+  <div class="intro-eyebrow">A personal archive · 30 days · 30 proofs</div>
+  <div class="letter-text" id="introText">
+    <span class="line">To my future self,</span>
+    <span class="line">if you're reading this one day,</span>
+    <span class="line">it probably means you've forgotten</span>
+    <span class="line">how beautiful the world can be.</span>
+    <span class="line" style="margin-top:1em; color: rgba(240,232,213,0.55);">You don't believe me, do you?</span>
+    <span class="line" style="color: rgba(240,232,213,0.55);">Then look.</span>
+    <span class="line" style="margin-top:1em;">I started collecting proof.</span>
+    <span class="line">I know you have a tendency to lose your way,</span>
+    <span class="line">so I made sure you could always find your way back.</span>
+  </div>
+  <div class="scroll-hint">scroll to open the proofs</div>
+</section>
+
+
+<div class="section-title">
+  <h2>The Evidence</h2>
+  <div class="divider"></div>
+  <p>Click to unseal each proof</p>
+</div>
+
+<section id="proofs">
+  <div class="grid" id="proofGrid"></div>
+</section>
+
+
+<section id="outro">
+  <div class="outro-text" id="outroText">
+    <span class="line">Do you know what I realized during these 30 days?</span>
+    <span class="line">The world is beautiful,</span>
+    <span class="line">and it always has been.</span>
+    <span class="line" style="color: rgba(240,232,213,0.5); margin-top: 0.5em;">It was just me looking in the wrong places.</span>
+    <span class="line" style="margin-top: 1em;">So if one day you get lost again,</span>
+    <span class="line">come back here and look at these photos.</span>
+    <span class="line" style="color: rgba(240,232,213,0.5); margin-top:0.5em;">They're not extraordinary.</span>
+    <span class="line" style="color: var(--gold-light);">That's exactly why they matter.</span>
+    <span class="line" style="margin-top: 1em;">Because beauty exists in simple moments too,</span>
+    <span class="line">and it never truly disappears —</span>
+    <span class="line" style="color: var(--gold-light);">it's just waiting to be noticed.</span>
+    <span class="line" style="margin-top: 1.5em; font-size: 0.95em; color: rgba(240,232,213,0.6);">So please, don't forget to look for it.</span>
+  </div>
+  <div class="outro-divider"></div>
+  <div class="outro-signature" id="outroSig">End of archive · with love, your past self</div>
+</section>
+
+<script>
+
+const proofs = [
+  { day: 1,  text: "", imageSrc: "20-01.jpg" },
+  { day: 2,  text: "I'm grateful to Dostoïevski for writing these books in which I recognize myself.", imageSrc: "21-01.jpg" },
+  { day: 3,  text: "I'm grateful to have received a new cap and to find my style day after day.", imageSrc: "22-01.jpg" },
+  { day: 4,  text: "I'm grateful to have spent time with my friends and forgotten my problems for a day.", imageSrc: "23-01.jpg" },
+  { day: 5,  text: "I'm grateful to Anélie and her family for organizing a murder mystery party.", imageSrc: "05-02.jpg" },
+  { day: 6,  text: "I'm grateful to my uncle for inviting us and preparing the food.", imageSrc: "25-01.jpg" },
+  { day: 7,  text: "", imageSrc: "26-01.jpg" },
+  { day: 8,  text: "I'm grateful for the first film shoot for our student union.", imageSrc: "27-01.jpg" },
+  { day: 9,  text: "I'm grateful to have created a connection with the first-year students.", imageSrc: "28-01.jpg" },
+  { day: 10, text: "I'm grateful to have found the guitar as an escape.", imageSrc: "29-01.jpg" },
+  { day: 11, text: "I'm grateful to have succeeded in publishing Valium, my first guitar-voice.", imageSrc: "30-01.jpg" },
+  { day: 12, text: "I'm grateful that I managed to have a drink without drinking alcohol.", imageSrc: "31-01.jpg" },
+  { day: 13, text: "I'm grateful to have seen the sun rise on the road.", imageSrc: "01-02.jpg" },
+  { day: 14, text: "I'm grateful to Lou, my student mentor, for giving me this sticker.", imageSrc: "02-02.jpg" },
+  { day: 15, text: "I'm grateful to my parents for taking me to see a film with Adèle Exarchopoulos.", imageSrc: "03-02.jpg" },
+  { day: 16, text: "I'm grateful to have done a driving course in a Mercedes A-Class", imageSrc: "04-02.jpg" },
+  { day: 17, text: "I'm grateful for the return of the sun, which has positively impacted my mood.", imageSrc: "24-01.jpg" },
+  { day: 18, text: "I'm grateful to have danced in this bar to clear my head.", imageSrc: "06-02.jpg" },
+  { day: 19, text: "I'm grateful to have found my favorite drink, which had been missing for a year.", imageSrc: "07-02.jpg" },
+  { day: 20, text: "I'm grateful to my mom for making crepes.", imageSrc: "08-02.jpg" },
+  { day: 21, text: "I'm grateful to have found a bar that agrees to host our student union's parties.", imageSrc: "09-02.jpg" },
+  { day: 22, text: "I'm grateful to all the students who left a message on our family wall.", imageSrc: "10-02.jpg" },
+  { day: 23, text: "I'm grateful to Maily and the other musicians for giving us a musical break at lunchtime.", imageSrc: "11-02.jpg" },
+  { day: 24, text: "I'm grateful to have a group where we don't forget each other despite the distance.", imageSrc: "12-02.jpg" },
+  { day: 25, text: "I'm grateful to have smart friends for putting that sticker on my car (it's ironic, but they're funny, so I love them anyway).", imageSrc: "13-02.jpg" },
+  { day: 26, text: "I'm grateful to wake up every morning knowing that I will soon realize my dream of seeing The Weeknd in concert.", imageSrc: "14-02.jpg" },
+  { day: 27, text: "I'm grateful to have coded and published my portfolio so that I can look for an internship.", imageSrc: "15-02.jpg" },
+  { day: 28, text: "I'm grateful to have had fun with Nala, my sister's dog, for a day.", imageSrc: "16-02.jpg" },
+  { day: 29, text: "I'm grateful to have spent a peaceful evening with Lou and Mike.", imageSrc: "17-02.jpg" },
+  { day: 30, text: "I'm grateful to have spent a fun lunch with the first-year students answering their questions about our student union.", imageSrc: "18-02.jpg" },
+];
+
+
+const startDate = new Date(2026, 0, 20);
+function getDateForDay(dayNumber) {
+  const d = new Date(startDate);
+  d.setDate(startDate.getDate() + dayNumber - 1);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+
+let openCount = 0;
+const counterValue = document.getElementById('counter-value');
+const counterFill = document.getElementById('counter-fill');
+
+function updateCounter(delta) {
+  openCount += delta;
+  counterValue.textContent = `${openCount} / 30`;
+  counterFill.style.width = `${(openCount / 30) * 100}%`;
+  counterValue.classList.remove('bump');
+  void counterValue.offsetWidth; // reflow to restart animation
+  counterValue.classList.add('bump');
+  setTimeout(() => counterValue.classList.remove('bump'), 500);
+}
+
+
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxCaption = document.getElementById('lightbox-caption');
+
+function openLightbox(src, caption) {
+  lightboxImg.src = src;
+  lightboxCaption.textContent = caption;
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+lightbox.addEventListener('click', closeLightbox);
+document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+
+const audio = document.getElementById('bg-music');
+const musicBtn = document.getElementById('music-btn');
+const iconPlay = document.getElementById('icon-play');
+const iconPause = document.getElementById('icon-pause');
+const musicBars = document.getElementById('music-bars');
+let isPlaying = false;
+let musicStarted = false;
+
+audio.volume = 0;
+const TARGET_VOLUME = 0.35;
+const FADE_DURATION = 3000;
+
+function fadeInMusic() {
+  const steps = 60;
+  const interval = FADE_DURATION / steps;
+  const increment = TARGET_VOLUME / steps;
+  let step = 0;
+  const timer = setInterval(() => {
+    step++;
+    audio.volume = Math.min(TARGET_VOLUME, increment * step);
+    if (step >= steps) clearInterval(timer);
+  }, interval);
+}
+
+function startMusic() {
+  if (musicStarted) return;
+  musicStarted = true;
+  audio.play().then(() => {
+    isPlaying = true;
+    iconPlay.style.display = 'none';
+    iconPause.style.display = 'block';
+    musicBars.classList.add('playing');
+    fadeInMusic();
+    const tooltip = document.getElementById('music-tooltip');
+    tooltip.classList.add('show');
+    setTimeout(() => tooltip.classList.add('dismissed'), 4000);
+  }).catch(() => {
+    isPlaying = false;
+    musicStarted = false;
+  });
+}
+
+function onFirstInteraction() {
+  startMusic();
+  window.removeEventListener('scroll', onFirstInteraction);
+  window.removeEventListener('click', onFirstInteraction);
+  window.removeEventListener('keydown', onFirstInteraction);
+}
+
+musicBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('music-tooltip').classList.add('dismissed');
+  if (!musicStarted) { startMusic(); return; }
+  if (isPlaying) {
+    audio.pause();
+    iconPlay.style.display = 'block';
+    iconPause.style.display = 'none';
+    musicBars.classList.remove('playing');
+  } else {
+    audio.play().catch(() => {});
+    iconPlay.style.display = 'none';
+    iconPause.style.display = 'block';
+    musicBars.classList.add('playing');
+  }
+  isPlaying = !isPlaying;
+});
+
+
+const grid = document.getElementById('proofGrid');
+proofs.forEach(({ day, text, imageSrc }) => {
+  const card = document.createElement('div');
+  card.className = 'proof-card';
+  card.dataset.day = day;
+
+  const dateLabel = getDateForDay(day);
+
+  const sealedHTML = `
+    <div class="card-sealed">
+      <div class="proof-number">Proof No. ${String(day).padStart(2,'0')}</div>
+      <div class="wax-seal"><span class="seal-letter">✦</span></div>
+      <div class="card-sealed-label">sealed · click to open</div>
+    </div>`;
+
+  const imgHTML = imageSrc
+    ? `<img src="${imageSrc}" alt="Day ${day}" loading="lazy" data-src="${imageSrc}" data-caption="Day ${String(day).padStart(2,'0')} · ${dateLabel}">`
+    : `<div class="photo-fallback">[ your photo here · day ${String(day).padStart(2,'0')} ]</div>`;
+
+  const gratefulText = text.replace(/I'm grateful (to|for|that)/i, "<em>I'm grateful $1</em>");
+
+  const revealedHTML = `
+    <div class="card-revealed">
+      <div class="photo-placeholder">${imgHTML}</div>
+      <div class="card-caption">
+        <div class="card-day">Day ${String(day).padStart(2,'0')} · ${dateLabel}</div>
+        <div class="card-text">${gratefulText}</div>
+      </div>
+    </div>
+    <div class="close-hint">tap to reseal</div>`;
+
+  card.innerHTML = sealedHTML + revealedHTML;
+
+  
+  const img = card.querySelector('img');
+  if (img) {
+    img.addEventListener('click', (e) => {
+      e.stopPropagation(); 
+      openLightbox(img.dataset.src, img.dataset.caption);
+    });
+  }
+
+  
+  card.addEventListener('click', () => {
+    const sealed = card.querySelector('.card-sealed');
+    const revealed = card.querySelector('.card-revealed');
+    const isOpen = card.classList.contains('open');
+    if (isOpen) {
+      card.classList.remove('open');
+      sealed.classList.remove('hidden');
+      revealed.classList.remove('visible');
+      updateCounter(-1);
+    } else {
+      card.classList.add('open');
+      sealed.classList.add('hidden');
+      revealed.classList.add('visible');
+      updateCounter(1);
+    }
+  });
+
+  grid.appendChild(card);
+});
+
+
+const introLines = document.querySelectorAll('#introText .line');
+let introStarted = false;
+
+function revealIntroLines() {
+  if (introStarted) return;
+  introStarted = true;
+  const el = document.getElementById('introText');
+  el.style.opacity = 1;
+  introLines.forEach((line, i) => {
+    setTimeout(() => line.classList.add('visible'), 800 + i * 350);
+  });
+}
+
+
+let outroStarted = false;
+function revealOutro() {
+  if (outroStarted) return;
+  outroStarted = true;
+  const outroLines = document.querySelectorAll('#outroText .line');
+  outroLines.forEach((line, i) => {
+    setTimeout(() => line.classList.add('visible'), i * 320);
+  });
+  setTimeout(() => {
+    document.getElementById('outroSig').classList.add('animate');
+  }, outroLines.length * 320 + 400);
+}
+
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      if (e.target.id === 'intro') revealIntroLines();
+      if (e.target.id === 'outro') revealOutro();
+    }
+  });
+}, { threshold: 0.2 });
+
+observer.observe(document.getElementById('intro'));
+observer.observe(document.getElementById('outro'));
+
+
+window.addEventListener('load', () => {
+  const enterBtn = document.getElementById('loader-enter');
+
+  setTimeout(() => {
+    enterBtn.classList.add('visible');
+  }, 2200);
+
+  enterBtn.addEventListener('click', () => {
+    document.getElementById('loader').classList.add('gone');
+    document.getElementById('counter').classList.add('visible');
+    document.getElementById('music-player').classList.add('visible');
+
+    audio.play().then(() => {
+      musicStarted = true;
+      isPlaying = true;
+      iconPlay.style.display = 'none';
+      iconPause.style.display = 'block';
+      musicBars.classList.add('playing');
+      fadeInMusic();
+
+      const tooltip = document.getElementById('music-tooltip');
+      tooltip.classList.add('show');
+      setTimeout(() => tooltip.classList.add('dismissed'), 4000);
+    }).catch(() => {
+      isPlaying = false;
+      musicStarted = false;
+    });
+
+    setTimeout(revealIntroLines, 600);
+  });
+});
+</script>
+</body>
+</html>

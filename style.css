@@ -1,0 +1,753 @@
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-dim: #7a6030;
+  --black: #080808;
+  --dark: #0f0f0f;
+  --cream: #f0e8d5;
+  --warm: #2a1f0f;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--cream);
+  font-family: 'Cormorant Garamond', serif;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+
+#intro {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  position: relative;
+  text-align: center;
+}
+
+#intro::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, rgba(201,168,76,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.intro-eyebrow {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 60px;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.3s forwards;
+}
+
+.letter-text {
+  max-width: 640px;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  line-height: 2;
+  color: var(--cream);
+  opacity: 0;
+}
+
+.letter-text .line {
+  display: block;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.letter-text .line.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-hint {
+  margin-top: 80px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUp 1s ease 4s forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.scroll-hint::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: lineGrow 2s ease-in-out 4.5s infinite;
+}
+
+@keyframes lineGrow {
+  0%, 100% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+}
+
+
+.section-title {
+  text-align: center;
+  padding: 120px 40px 60px;
+}
+
+.section-title h2 {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--gold-dim);
+  letter-spacing: 0.15em;
+  font-weight: 400;
+}
+
+.section-title .divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  margin: 20px auto;
+}
+
+.section-title p {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: rgba(201,168,76,0.35);
+  text-transform: uppercase;
+}
+
+
+#proofs {
+  padding: 0 clamp(20px, 5vw, 80px) 120px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 28px;
+}
+
+
+.proof-card {
+  aspect-ratio: 3/4;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid rgba(201,168,76,0.12);
+  background: var(--dark);
+  overflow: hidden;
+  transition: border-color 0.4s ease, transform 0.4s ease;
+}
+
+.proof-card:hover {
+  border-color: rgba(201,168,76,0.4);
+  transform: translateY(-4px);
+}
+
+
+.card-sealed {
+  position: absolute; inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: var(--dark);
+  z-index: 2;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.card-sealed.hidden {
+  opacity: 0;
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+.proof-number {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+}
+
+.wax-seal {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-dim);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.proof-card:hover .wax-seal {
+  border-color: var(--gold);
+  transform: scale(1.08);
+}
+
+.wax-seal::before {
+  content: '';
+  position: absolute; inset: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(201,168,76,0.25), rgba(201,168,76,0.05));
+  border: 1px solid rgba(201,168,76,0.2);
+}
+
+.seal-letter {
+  font-family: 'IM Fell English', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  position: relative;
+  z-index: 1;
+}
+
+.card-sealed-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.75rem;
+  color: rgba(201,168,76,0.4);
+  letter-spacing: 0.08em;
+}
+
+
+.card-revealed {
+  position: absolute; inset: 0;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-revealed.visible {
+  opacity: 1;
+}
+
+.photo-placeholder {
+  flex: 1;
+  background: linear-gradient(135deg, #1a1209 0%, #0f0d08 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.photo-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  cursor: zoom-in;
+}
+
+.photo-placeholder .photo-fallback {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: rgba(201,168,76,0.2);
+  text-transform: uppercase;
+  text-align: center;
+  padding: 20px;
+}
+
+.photo-placeholder::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(8,8,8,0.9) 100%);
+  pointer-events: none;
+}
+
+.card-caption {
+  padding: 16px 18px 20px;
+  background: var(--dark);
+  border-top: 1px solid rgba(201,168,76,0.08);
+}
+
+.card-day {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.card-text {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--cream);
+}
+
+.card-text em {
+  color: var(--gold-light);
+  font-style: normal;
+}
+
+
+.close-hint {
+  position: absolute;
+  top: 10px; right: 12px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: rgba(201,168,76,0.25);
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.5s ease 1s;
+  text-transform: uppercase;
+}
+
+.proof-card.open .close-hint { opacity: 1; }
+
+
+#outro {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  text-align: center;
+  position: relative;
+}
+
+#outro::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 60%, rgba(201,168,76,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.outro-text {
+  max-width: 600px;
+}
+
+.outro-text .line {
+  display: block;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 2;
+  color: var(--cream);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.outro-text .line.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.outro-divider {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent);
+  margin: 60px auto;
+}
+
+.outro-signature {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards;
+  animation-play-state: paused;
+}
+
+.outro-signature.animate {
+  animation-play-state: running;
+}
+
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+#loader {
+  position: fixed; inset: 0;
+  background: var(--black);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#loader.gone {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader-title {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  opacity: 0;
+  animation: fadeUp 1.2s ease 0.4s forwards;
+}
+
+.loader-sub {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUp 1s ease 1s forwards;
+}
+
+.loader-line {
+  width: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  animation: lineExpand 1.5s ease 1.5s forwards;
+}
+
+@keyframes lineExpand {
+  from { width: 0; opacity: 0; }
+  to { width: 200px; opacity: 1; }
+}
+
+
+#loader-enter {
+  margin-top: 40px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  border: 1px solid rgba(201,168,76,0.2);
+  padding: 12px 28px;
+  cursor: pointer;
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.8s ease, transform 0.8s ease, color 0.3s, border-color 0.3s;
+  position: relative;
+}
+
+#loader-enter::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(201,168,76,0.03);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#loader-enter:hover {
+  color: var(--gold);
+  border-color: rgba(201,168,76,0.5);
+}
+
+#loader-enter:hover::before { opacity: 1; }
+
+#loader-enter.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.corner {
+  position: absolute;
+  width: 24px; height: 24px;
+  pointer-events: none;
+}
+.corner-tl { top: 14px; left: 14px; border-top: 1px solid var(--gold-dim); border-left: 1px solid var(--gold-dim); }
+.corner-tr { top: 14px; right: 14px; border-top: 1px solid var(--gold-dim); border-right: 1px solid var(--gold-dim); }
+.corner-bl { bottom: 14px; left: 14px; border-bottom: 1px solid var(--gold-dim); border-left: 1px solid var(--gold-dim); }
+#loader-enter {
+  margin-top: 36px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.8s ease, transform 0.8s ease, color 0.3s ease;
+  display: inline-block;
+}
+#loader-enter.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+#loader-enter:hover {
+  color: var(--gold);
+}
+#loader-enter::before {
+  content: '→ ';
+  opacity: 0.5;
+}
+
+
+#counter {
+  position: fixed;
+  top: 24px;
+  right: 28px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+#counter.visible { opacity: 1; }
+
+#counter-label {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: rgba(201,168,76,0.35);
+  text-transform: uppercase;
+}
+
+#counter-value {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold-dim);
+  transition: color 0.4s ease;
+}
+#counter-value.bump { color: var(--gold-light); }
+
+#counter-bar {
+  width: 60px;
+  height: 1px;
+  background: rgba(201,168,76,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+#counter-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: linear-gradient(to right, var(--gold-dim), var(--gold));
+  width: 0%;
+  transition: width 0.6s ease;
+}
+
+#music-player {
+  position: fixed;
+  bottom: 24px;
+  right: 28px;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+#music-player.visible { opacity: 1; }
+
+#music-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.25);
+  background: rgba(8,8,8,0.8);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.3s, transform 0.2s;
+  backdrop-filter: blur(6px);
+}
+#music-btn:hover {
+  border-color: var(--gold-dim);
+  transform: scale(1.08);
+}
+#music-btn svg {
+  width: 14px; height: 14px;
+  fill: var(--gold-dim);
+  transition: fill 0.3s;
+}
+#music-btn:hover svg { fill: var(--gold); }
+
+#music-btn-wrap {
+  position: relative;
+}
+
+#music-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  background: rgba(15,15,15,0.95);
+  border: 1px solid rgba(201,168,76,0.2);
+  padding: 8px 12px;
+  white-space: nowrap;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: rgba(201,168,76,0.6);
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  backdrop-filter: blur(6px);
+}
+
+
+#music-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  right: 13px;
+  width: 8px; height: 8px;
+  background: rgba(15,15,15,0.95);
+  border-right: 1px solid rgba(201,168,76,0.2);
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+  transform: rotate(45deg);
+}
+
+#music-tooltip.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#music-tooltip.dismissed {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+#music-label {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.25em;
+  color: rgba(201,168,76,0.3);
+  text-transform: uppercase;
+}
+
+#music-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+#music-bars.playing { opacity: 1; }
+#music-bars span {
+  display: block;
+  width: 2px;
+  background: var(--gold-dim);
+  border-radius: 1px;
+  animation: barBounce 0.8s ease-in-out infinite alternate;
+}
+#music-bars span:nth-child(1) { height: 4px;  animation-delay: 0s; }
+#music-bars span:nth-child(2) { height: 10px; animation-delay: 0.15s; }
+#music-bars span:nth-child(3) { height: 6px;  animation-delay: 0.3s; }
+#music-bars span:nth-child(4) { height: 12px; animation-delay: 0.1s; }
+
+@keyframes barBounce {
+  from { transform: scaleY(0.3); }
+  to   { transform: scaleY(1); }
+}
+
+#lightbox {
+  position: fixed; inset: 0;
+  z-index: 2000;
+  background: rgba(4,4,4,0.97);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  cursor: zoom-out;
+}
+#lightbox.open {
+  opacity: 1;
+  visibility: visible;
+}
+#lightbox img {
+  max-width: 92vw;
+  max-height: 92vh;
+  object-fit: contain;
+  border: 1px solid rgba(201,168,76,0.1);
+  box-shadow: 0 0 80px rgba(0,0,0,0.8);
+}
+#lightbox-close {
+  position: absolute;
+  top: 20px; right: 24px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: rgba(201,168,76,0.3);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+#lightbox-close:hover { color: var(--gold); }
+
+#lightbox-caption {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: rgba(240,232,213,0.4);
+  text-align: center;
+  white-space: nowrap;
+}
+
+
+#loader-enter {
+  margin-top: 36px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.8s ease, transform 0.8s ease, color 0.3s ease;
+  display: inline-block;
+}
+#loader-enter.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+#loader-enter:hover { color: var(--gold); }
+#loader-enter::before { content: '→ '; opacity: 0.5; }
